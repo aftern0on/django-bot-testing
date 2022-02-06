@@ -11,8 +11,6 @@ ENV PATH="$POETRY_HOME/bin:$VENV_PATH/bin:$PATH"
 
 WORKDIR /app
 
-RUN pip install cleo urllib3 charset-normalizer
-
 RUN curl -sSL https://raw.githubusercontent.com/python-poetry/poetry/master/get-poetry.py | python -
 
 COPY poetry.lock pyproject.toml ./

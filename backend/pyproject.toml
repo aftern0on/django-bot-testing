@@ -16,6 +16,11 @@ django-tinymce = "^3.3.0"
 drf-spectacular = "^0.20.2"
 django-filter = "^21.1"
 transliterate = "^1.10.2"
+cleo = "^0.8.1"
+urllib3 = "^1.26.8"
+charset-normalizer = "^2.0.11"
+python-Levenshtein = "^0.12.2"
+fuzzywuzzy = "^0.18.0"
 
 [tool.poetry.dev-dependencies]
 
