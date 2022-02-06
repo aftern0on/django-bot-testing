@@ -35,6 +35,7 @@ docker-compose exec backend python3 manage.py test
   * _`write_id` - ссылка на запись пользователя_
   
 В Swagger можно посмотреть документацию по API: `127.0.0.1:8000/api/docs/`  
-В админ-панели также можно посмотреть на записи: `127.0.0.1:8000/api/docs/`  
+В админ-панели также можно посмотреть на записи: `127.0.0.1:8000/admin/`  
 В ![backend/apps/util/cat.py](https://github.com/aftern0on/django-bot-testing/blob/main/backend/apps/util/cat.py) можно посмотреть алгоритм диалога и распознование ошибок  
-В ![backend/apps/bot/models.py](https://github.com/aftern0on/django-bot-testing/blob/main/backend/apps/bot/models.py) можно посмотреть описание моделей
+В ![backend/apps/bot/models.py](https://github.com/aftern0on/django-bot-testing/blob/main/backend/apps/bot/models.py) можно посмотреть описание моделей  
+В ![backend/apps/bot/tests.py](https://github.com/aftern0on/django-bot-testing/blob/main/backend/apps/bot/tests.py) можно посмотреть на некрасивую реализацию тестов
