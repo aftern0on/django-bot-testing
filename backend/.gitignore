@@ -1,0 +1,25 @@
+# Медиа-файлы, документация
+/media/
+/project/media/
+/docs/_build/
+/docs/_static/
+/docs/_templates/
+
+# Файлы окружения
+project/.env
+.venv
+env/
+venv/
+ENV/
+env.bak/
+venv.bak/
+
+# Байт-файлы / файлы оптимизации / DLL файлы
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Хлам Django
+/.pytest_cache/
+/.hypothesis/
+

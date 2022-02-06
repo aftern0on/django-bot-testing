@@ -1,0 +1,19 @@
+version: '3.4'
+
+services:
+  backend:
+    restart: unless-stopped
+    command: python manage.py runserver --noreload 0.0.0.0:8000
+    entrypoint: ./entrypoint.sh
+
+  database:
+    image: postgres
+    volumes:
+      - database-data:/var/lib/postgresql/data
+    environment:
+      - "POSTGRES_DB=${DATABASE_NAME}"
+      - "POSTGRES_USER=${DATABASE_USER}"
+      - "POSTGRES_PASSWORD=${DATABASE_PASSWORD}"
+
+volumes:
+    database-data:
