@@ -1,5 +1,5 @@
 from random import choice
-from apps.bot.models import Write
+from apps.bot.models import Sender
 from fuzzywuzzy import fuzz
 
 
@@ -8,14 +8,14 @@ class Cat:
     answer_no = ["нетконечно", "ноуп", "найн"]
 
     @staticmethod
-    def get_answer(write: Write, message: str):
+    def get_answer(write: Sender, message: str):
         """Получение ответа от бота.
         """
 
         # Сброс/начало диалога
         if message == "/start":
             return Cat.set_step(
-                write, Write.STEP.STEP_ONE, "Привет! Я могу отличить кота от хлеба! Объект перед тобой квадратный?")
+                write, Sender.STEP.STEP_ONE, "Привет! Я могу отличить кота от хлеба! Объект перед тобой квадратный?")
 
         # Сбрасываем лишние символы, оставляем только буквы, все в нижний регистр
         message = ''.join(ch for ch in message.lower() if ch.isalpha())
@@ -24,29 +24,29 @@ class Cat:
         message = Cat.find_an_error(message)
 
         # Находимся на этапе формы
-        if write.step == Write.STEP.STEP_ONE:
+        if write.step == Sender.STEP.STEP_ONE:
             # Объект не квадратный
             if message in Cat.answer_no:
                 write.cats += 1
-                return Cat.set_step(write, Write.STEP.STEP_FINISH, "Это кот, а не хлеб! Не ешь его!")
+                return Cat.set_step(write, Sender.STEP.STEP_FINISH, "Это кот, а не хлеб! Не ешь его!")
             # Квадратный
             if message in Cat.answer_yes:
-                return Cat.set_step(write, Write.STEP.STEP_TWO, "У него есть уши?")
+                return Cat.set_step(write, Sender.STEP.STEP_TWO, "У него есть уши?")
 
         # Находимся на этапе ушей
-        if write.step == Write.STEP.STEP_TWO:
+        if write.step == Sender.STEP.STEP_TWO:
             # Объект с ушами
             if message in Cat.answer_yes:
                 write.cats += 1
-                return Cat.set_step(write, Write.STEP.STEP_FINISH, "Это кот, а не хлеб! Не ешь его!")
+                return Cat.set_step(write, Sender.STEP.STEP_FINISH, "Это кот, а не хлеб! Не ешь его!")
             # Объект не с ушами, все нормально
             if message in Cat.answer_no:
                 write.breads += 1
-                return Cat.set_step(write, Write.STEP.STEP_FINISH, "Это хлеб, а не кот! Ешь его!")
+                return Cat.set_step(write, Sender.STEP.STEP_FINISH, "Это хлеб, а не кот! Ешь его!")
 
         # Если финишная прямая и пользователь что-то еще сказал
-        if write.step == Write.STEP.STEP_FINISH:
-            return Cat.set_step(write, Write.STEP.STEP_ONE, "Давай-ка начнем сначала. Объект перед тобой квадратный?")
+        if write.step == Sender.STEP.STEP_FINISH:
+            return Cat.set_step(write, Sender.STEP.STEP_ONE, "Давай-ка начнем сначала. Объект перед тобой квадратный?")
 
         # Если бот ничего не понял
         return choice(["Чего-чего?", "Повтори-ка!"])
