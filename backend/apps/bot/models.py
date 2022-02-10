@@ -24,17 +24,26 @@ class Sender(models.Model):
     """Модель записи отправителя.
     """
 
-    class STEP:
-        STEP_ONE = 'one'
-        STEP_TWO = 'two'
-        STEP_FINISH = 'finish'
-        CHOICES = [
-            (STEP_TWO, 'Первый шаг'),
-            (STEP_TWO, 'Второй шаг'),
-            (STEP_FINISH, 'Финиш')]
+    class STAGE:
+        """Этап отправителя в диалоге с ботом.
+        Этап определяет обработчик, которым будет пользоваться бот при реагировании на ответ.
+        """
 
-    key = models.CharField(verbose_name="Ручной идентификатор отправителя", max_length=64)
-    step = models.CharField(verbose_name="Какой опрос проходит отправитель", choices=STEP.CHOICES, max_length=64)
+        START = 'start'          # Начальный этап
+        FORM = 'form'            # Этап выяснения формы объекта
+        EARS = 'ears'            # Этап выяснения наличия у объекта ушей
+        END = 'end'      # Конец диалога
+        CHOICES = [
+            (START, 'Старт'),
+            (FORM, 'Форма объекта'),
+            (EARS, 'Наличие у объекта ушей'),
+            (END, 'Конец диалога')
+        ]
+
+    key = models.CharField(verbose_name="Ручной идентификатор", max_length=64)
+    step = models.CharField(
+        verbose_name="На каком этапе диалога", max_length=128,
+        choices=STAGE.CHOICES, default=STAGE.START)
     cats = models.IntegerField(verbose_name="Количество съеденных котов", default=0)
     breads = models.IntegerField(verbose_name="Количество съеденного хлеба", default=0)
 
@@ -42,6 +51,13 @@ class Sender(models.Model):
         verbose_name = "Отправитель"
         verbose_name_plural = "Отправители"
         ordering = ["key", "id"]
+
+    def set_step(self, step):
+        """Переопределение этапа в диалоге.
+        """
+
+        self.step = step
+        self.save()
 
     def __str__(self):
         return f"{self.key}"

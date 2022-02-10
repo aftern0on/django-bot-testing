@@ -16,4 +16,4 @@ class SenderAdmin(admin.ModelAdmin):
     """Добавление модели отправителя в админ-панель.
     """
 
-    readonly_fields = ['key', 'cats', 'breads']
+    readonly_fields = ['cats', 'breads']
