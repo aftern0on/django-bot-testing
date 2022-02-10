@@ -1,9 +1,10 @@
+from django.db.models import Sum
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
 from apps.bot.models import Message as MessageModel
 from apps.bot.models import Sender as SenderModel
-from apps.util.cat import Cat
+from apps.util.dialogue import Dialogue
 
 
 class MessageView(APIView):
@@ -25,9 +26,9 @@ class MessageView(APIView):
             return Response("Отсутствует один или несколько параметров: user_id, message")
 
         previous = MessageModel.objects.filter(sender__key=user_id).last()
-        sender = SenderModel.objects.get_or_create(key=user_id)
-        answer = Cat.get_answer(sender[0], message)
-        MessageModel(sender=sender[0], text=message, answer=answer, previous=previous).save()
+        sender = SenderModel.objects.get_or_create(key=user_id)[0]
+        answer = Dialogue.get_answer(sender, message)
+        MessageModel(sender=sender, text=message, answer=answer, previous=previous).save()
         return Response(answer)
 
 
@@ -41,12 +42,10 @@ class DataView(APIView):
         Результат: данные о выборе отправителей в формате {"cats": int, "breads": int}
         """
 
-        cats = 0
-        breads = 0
-        for sender in SenderModel.objects.all():
-            cats += sender.cats
-            breads += sender.breads
-
-        return Response({"cats": cats, "breads": breads})
+        # Получение выборки, обработка полученных данных
+        data = SenderModel.objects.aggregate(Sum('cats'), Sum('breads'))
+        cats = data['cats__sum'] if data['cats__sum'] else 0
+        breads = data['breads__sum'] if data['breads__sum'] else 0
+        return Response({'cats': cats, 'breads': breads})
 
 
